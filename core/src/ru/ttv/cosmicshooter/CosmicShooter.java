@@ -21,7 +21,7 @@ public class CosmicShooter extends ApplicationAdapter {
 		Gdx.gl.glClearColor(255, 255, 255, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		batch.draw(img, -1000, -1000);
+		batch.draw(img, 0, 0,800,800);
 		batch.end();
 	}
 	
