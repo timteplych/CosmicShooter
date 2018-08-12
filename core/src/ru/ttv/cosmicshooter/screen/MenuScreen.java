@@ -1,4 +1,4 @@
-package ru.ttv.cosmicshooter.Screen;
+package ru.ttv.cosmicshooter.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
