@@ -30,8 +30,8 @@ public class MenuScreen extends Base2DScreen {
         imgBackGround = new Texture("2560x2560CatInSpace.jpg");
         img = new Texture("destroyer348x478.png");
         position = new Vector2(0,0);
-        velocity = new Vector2(0.1f,0.7f);
-        touchPosition = new Vector2();
+        velocity = new Vector2(0,0);
+        touchPosition = null;
     }
 
     @Override
@@ -44,7 +44,13 @@ public class MenuScreen extends Base2DScreen {
         batch.draw(img, position.x, position.y,100,140);
         batch.end();
 
-        position.add(velocity);
+        if(touchPosition != null){
+            if(position.x < touchPosition.x & position.y < touchPosition.y){
+                position.add(velocity);
+            }
+        }else{
+            position.add(velocity);
+        }
     }
 
     @Override
@@ -58,7 +64,8 @@ public class MenuScreen extends Base2DScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         super.touchDown(screenX, screenY, pointer, button);
-        touchPosition.set(screenX,Gdx.graphics.getHeight() - screenY);
+        touchPosition = new Vector2(screenX,Gdx.graphics.getHeight() - screenY);
+        velocity = touchPosition.cpy().nor();
         System.out.println("Touch position x: "+touchPosition.x+" Touch position y: "+touchPosition.y);
         return false;
     }
