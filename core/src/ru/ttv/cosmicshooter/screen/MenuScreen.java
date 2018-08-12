@@ -45,7 +45,7 @@ public class MenuScreen extends Base2DScreen {
         batch.end();
 
         if(touchPosition != null){
-            if(position.x < touchPosition.x & position.y < touchPosition.y){
+            if(Math.round(position.x) != touchPosition.x && Math.round(position.y) != touchPosition.y){
                 position.add(velocity);
             }
         }else{
@@ -64,8 +64,14 @@ public class MenuScreen extends Base2DScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         super.touchDown(screenX, screenY, pointer, button);
-        touchPosition = new Vector2(screenX,Gdx.graphics.getHeight() - screenY);
-        velocity = touchPosition.cpy().nor();
+        if(touchPosition == null){
+            touchPosition = new Vector2(screenX,Gdx.graphics.getHeight() - screenY);
+        }else{
+            touchPosition.set(screenX,Gdx.graphics.getHeight() - screenY);
+        }
+        velocity.set(touchPosition.x,touchPosition.y);
+        velocity.sub(position);
+        velocity.nor();
         System.out.println("Touch position x: "+touchPosition.x+" Touch position y: "+touchPosition.y);
         return false;
     }
