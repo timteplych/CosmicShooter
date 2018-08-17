@@ -4,15 +4,18 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.ttv.cosmicshooter.base.Base2DScreen;
+import ru.ttv.cosmicshooter.base.Sprite;
+import ru.ttv.cosmicshooter.math.Rect;
 
 public class MenuScreen extends Base2DScreen {
-    private SpriteBatch batch;
     private Texture img;
     private Texture imgBackGround;
+    private Sprite imgSprite;
+    private Sprite imgBackGroundSprite;
 
     private Vector2 position;
     private Vector2 velocity;
@@ -26,9 +29,13 @@ public class MenuScreen extends Base2DScreen {
     @Override
     public void show() {
         super.show();
-        batch = new SpriteBatch();
         imgBackGround = new Texture("2560x2560CatInSpace.jpg");
         img = new Texture("destroyer348x478.png");
+        imgBackGroundSprite = new Sprite(new TextureRegion(imgBackGround));
+        imgSprite = new Sprite(new TextureRegion(img));
+        imgBackGroundSprite.setSize(23f,23f);
+        imgSprite.setSize(4f,4f);
+
         position = new Vector2(0,0);
         velocity = new Vector2(0,0);
         touchPosition = null;
@@ -37,11 +44,11 @@ public class MenuScreen extends Base2DScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        Gdx.gl.glClearColor(255, 255, 255, 1);
+        Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(imgBackGround,0,0,500,500);
-        batch.draw(img, position.x, position.y,100,140);
+        imgBackGroundSprite.draw(batch);
+        imgSprite.draw(batch);
         batch.end();
 
         if(touchPosition != null){
@@ -56,10 +63,15 @@ public class MenuScreen extends Base2DScreen {
     @Override
     public void dispose() {
         super.dispose();
-        batch.dispose();
         imgBackGround.dispose();
         img.dispose();
     }
+
+    @Override
+    public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
+    }
+
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
