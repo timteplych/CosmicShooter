@@ -8,10 +8,26 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix3;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
+
+import ru.ttv.cosmicshooter.math.MatrixUtils;
+import ru.ttv.cosmicshooter.math.Rect;
 
 public class Base2DScreen implements Screen,InputProcessor {
 
+    protected SpriteBatch batch;
     protected Game game;
+    private Rect screenBounds;
+    private Rect worldBounds;
+    private Rect glBounds;
+
+    private Matrix4 worldToGl;
+    private Matrix3 screenToWorld;
+
+    private Vector2 touch = new Vector2();
 
     public Base2DScreen(Game game) {
         this.game = game;
@@ -20,7 +36,10 @@ public class Base2DScreen implements Screen,InputProcessor {
 
     @Override
     public void show() {
-
+        if(batch != null){
+            throw new RuntimeException("Set screen without dispose");
+        }
+        this.batch = new SpriteBatch();
     }
 
     @Override
@@ -30,6 +49,20 @@ public class Base2DScreen implements Screen,InputProcessor {
 
     @Override
     public void resize(int width, int height) {
+        screenBounds.setSize(width,height);
+        screenBounds.setLeft(0);
+        screenBounds.setBottom(0);
+
+        float aspect = width/(float)height;
+        worldBounds.setHeight(1f);
+        worldBounds.setWidth(1f*aspect);
+        MatrixUtils.calcTransitionMatrix(worldToGl,worldBounds,glBounds);
+        batch.setProjectionMatrix(worldToGl);
+        MatrixUtils.calcTransitionMatrix(screenToWorld,screenBounds,worldBounds);
+        resize(worldBounds);
+    }
+
+    public void resize(Rect worldBounds){
 
     }
 
@@ -50,6 +83,7 @@ public class Base2DScreen implements Screen,InputProcessor {
 
     @Override
     public void dispose() {
+        batch.dispose();
 
     }
 
@@ -70,16 +104,34 @@ public class Base2DScreen implements Screen,InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        touch.set(screenX,screenBounds.getHeight()-screenY).mul(screenToWorld);
+        touchDown(touch,pointer);
+        return false;
+    }
+
+    private boolean touchDown(Vector2 touch, int pointer) {
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
+        touchUp(touch, pointer);
+        return false;
+    }
+
+    private boolean touchUp(Vector2 touch, int pointer) {
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
+        touchDragged(touch, pointer);
+        return false;
+    }
+
+    private boolean touchDragged(Vector2 touch, int pointer) {
         return false;
     }
 
