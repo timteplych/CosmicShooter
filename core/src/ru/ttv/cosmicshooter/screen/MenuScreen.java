@@ -12,6 +12,10 @@ import ru.ttv.cosmicshooter.base.Sprite;
 import ru.ttv.cosmicshooter.math.Rect;
 
 public class MenuScreen extends Base2DScreen {
+    private static final int STAR_COUNT = 128;
+    private static final float BUTTON_PRESS_SCALE = 0.9f;
+    private static final float BUTTON_HEIGHT = 0.15f;
+
     private Texture img;
     private Texture imgBackGround;
     private Sprite imgSprite;
