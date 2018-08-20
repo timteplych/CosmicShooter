@@ -36,6 +36,7 @@ public class MenuScreen extends Base2DScreen {
         imgBackGround = new Texture("2560x2560CatInSpace.jpg");
         img = new Texture("destroyer348x478.png");
         imgBackGroundSprite = new Sprite(new TextureRegion(imgBackGround));
+
         imgSprite = new Sprite(new TextureRegion(img));
         imgBackGroundSprite.setSize(23f,23f);
         imgSprite.setSize(4f,4f);
