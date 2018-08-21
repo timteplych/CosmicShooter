@@ -18,7 +18,7 @@ import ru.ttv.cosmicshooter.screen.sprites.Background;
 import ru.ttv.cosmicshooter.screen.sprites.Star;
 
 public class MenuScreen extends Base2DScreen implements ActionListener {
-    private static final int STAR_COUNT = 128;
+    private static final int STAR_COUNT = 256;
     private static final float BUTTON_PRESS_SCALE = 0.9f;
     private static final float BUTTON_HEIGHT = 0.15f;
 
@@ -48,8 +48,8 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         background = new Background(new TextureRegion(imgBackGround));
 
         imgSprite = new Sprite(new TextureRegion(img));
-        background.setSize(23f,23f);
-        imgSprite.setSize(4f,4f);
+        //background.setSize(23f,23f);
+        //imgSprite.setSize(4f,4f);
 
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
         star = new Star[STAR_COUNT];
