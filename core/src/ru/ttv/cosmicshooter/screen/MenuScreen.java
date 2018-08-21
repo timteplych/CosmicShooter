@@ -8,13 +8,16 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.ttv.cosmicshooter.base.ActionListener;
 import ru.ttv.cosmicshooter.base.Base2DScreen;
 import ru.ttv.cosmicshooter.base.Sprite;
 import ru.ttv.cosmicshooter.math.Rect;
+import ru.ttv.cosmicshooter.screen.menu.ButtonExit;
+import ru.ttv.cosmicshooter.screen.menu.ButtonNewGame;
 import ru.ttv.cosmicshooter.screen.sprites.Background;
 import ru.ttv.cosmicshooter.screen.sprites.Star;
 
-public class MenuScreen extends Base2DScreen {
+public class MenuScreen extends Base2DScreen implements ActionListener {
     private static final int STAR_COUNT = 128;
     private static final float BUTTON_PRESS_SCALE = 0.9f;
     private static final float BUTTON_HEIGHT = 0.15f;
@@ -24,8 +27,9 @@ public class MenuScreen extends Base2DScreen {
     private Sprite imgSprite;
     private TextureAtlas atlas;
     private Star star[];
-    private Background imgBackGroundSprite;
-    private ButtonExi
+    private Background background;
+    private ButtonExit buttonExit;
+    private ButtonNewGame buttonNewGame;
 
     private Vector2 position;
     private Vector2 velocity;
@@ -40,11 +44,11 @@ public class MenuScreen extends Base2DScreen {
     public void show() {
         super.show();
         imgBackGround = new Texture("textures/2560x2560CatInSpace.jpg");
-        img = new Texture("destroyer348x478.png");
-        imgBackGroundSprite = new Background(new TextureRegion(imgBackGround));
+        img = new Texture("textures/destroyer348x478.png");
+        background = new Background(new TextureRegion(imgBackGround));
 
         imgSprite = new Sprite(new TextureRegion(img));
-        imgBackGroundSprite.setSize(23f,23f);
+        background.setSize(23f,23f);
         imgSprite.setSize(4f,4f);
 
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
@@ -53,7 +57,11 @@ public class MenuScreen extends Base2DScreen {
             star[i] = new Star(atlas);
         }
 
-        button
+        buttonExit = new ButtonExit(atlas,this,BUTTON_PRESS_SCALE);
+        buttonExit.setHeightProportion(BUTTON_HEIGHT);
+
+        buttonNewGame = new ButtonNewGame(atlas,this,BUTTON_PRESS_SCALE);
+        buttonNewGame.setHeightProportion(BUTTON_HEIGHT);
 
         position = new Vector2(0,0);
         velocity = new Vector2(0,0);
@@ -63,10 +71,21 @@ public class MenuScreen extends Base2DScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        update(delta);
+        draw();
+    }
+
+    public void draw(){
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        imgBackGroundSprite.draw(batch);
+        background.draw(batch);
+
+        for(int i=0;i<star.length;i++){
+            star[i].draw(batch);
+        }
+        buttonExit.draw(batch);
+        buttonNewGame.draw(batch);
         imgSprite.draw(batch);
         batch.end();
 
@@ -79,36 +98,64 @@ public class MenuScreen extends Base2DScreen {
         }
     }
 
+    public void update(float delta){
+        for(int i=0; i<star.length; i++){
+            star[i].update(delta);
+        }
+    }
+
     @Override
     public void dispose() {
         super.dispose();
         imgBackGround.dispose();
         img.dispose();
+        atlas.dispose();
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-    }
-
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        super.touchDown(screenX, screenY, pointer, button);
-        if(touchPosition == null){
-            touchPosition = new Vector2(screenX,Gdx.graphics.getHeight() - screenY);
-        }else{
-            touchPosition.set(screenX,Gdx.graphics.getHeight() - screenY);
+        background.resize(worldBounds);
+        for (int i = 0; i < star.length ; i++) {
+            star[i].resize(worldBounds);
         }
-        velocity.set(touchPosition.x,touchPosition.y);
-        velocity.sub(position);
-        velocity.nor();
-        System.out.println("Touch position x: "+touchPosition.x+" Touch position y: "+touchPosition.y);
-        return false;
+        buttonExit.resize(worldBounds);
+        buttonNewGame.resize(worldBounds);
+    }
+
+
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer) {
+//        super.touchDown(screenX, screenY, pointer, button);
+//        if(touchPosition == null){
+//            touchPosition = new Vector2(screenX,Gdx.graphics.getHeight() - screenY);
+//        }else{
+//            touchPosition.set(screenX,Gdx.graphics.getHeight() - screenY);
+//        }
+//        velocity.set(touchPosition.x,touchPosition.y);
+//        velocity.sub(position);
+//        velocity.nor();
+//        System.out.println("Touch position x: "+touchPosition.x+" Touch position y: "+touchPosition.y);
+        buttonExit.touchDown(touch,pointer);
+        buttonNewGame.touchDown(touch,pointer);
+        return super.touchDown(touch,pointer);
     }
 
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return super.touchUp(screenX, screenY, pointer, button);
+    public boolean touchUp(Vector2 touch, int pointer) {
+        buttonExit.touchUp(touch, pointer);
+        buttonNewGame.touchUp(touch, pointer);
+        return super.touchUp(touch, pointer);
+    }
+
+
+
+    @Override
+    public void actionPerformed(Object src) {
+        if(src == buttonExit){
+            Gdx.app.exit();
+        }else if (src == buttonNewGame){
+            game.setScreen(new GameScreen(game));
+        }
     }
 }
