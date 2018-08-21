@@ -13,14 +13,19 @@ public class Ship extends Sprite {
 
     public Ship(TextureAtlas atlas) {
         super(atlas.findRegion("main_ship"));
-        setHeightProportion(0.25f);
+        //super(new TextureRegion(atlas.findRegion("main_ship").getTexture(),190,143));
+        setHeightProportion(0.15f);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        float posX = 0.5f;
-        float posY = 0.5f;
+        float posX = 0f;
+        float posY = 0f;
         pos.set(posX,posY);
+    }
+
+    public void changePosition(float x, float y){
+        pos.set(pos.x + x, pos.y + y);
     }
 }
