@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 import ru.ttv.cosmicshooter.base.Base2DScreen;
 import ru.ttv.cosmicshooter.math.Rect;
@@ -69,6 +70,7 @@ public class GameScreen extends Base2DScreen {
         for(int i=0; i<star.length; i++){
             star[i].update(delta);
         }
+        ship.update(delta);
     }
 
     public void checkCollisions() {
@@ -98,22 +100,25 @@ public class GameScreen extends Base2DScreen {
 
     @Override
     public boolean keyDown(int keycode) {
-        if(Input.Keys.LEFT == keycode){
-            System.out.println("left arrow key pressed");
-            ship.changePosition(-1*STEP,0);
-        }
-        if(Input.Keys.RIGHT == keycode){
-            System.out.println("right arrow key pressed");
-            ship.changePosition(STEP,0);
-        }
-        if(Input.Keys.UP == keycode){
-            System.out.println("up arrow key pressed");
-            ship.changePosition(0,STEP);
-        }
-        if(Input.Keys.DOWN == keycode){
-            System.out.println("down arrow key pressed");
-            ship.changePosition(0,-1*STEP);
-        }
+        ship.keyDown(keycode);
         return super.keyDown(keycode);
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        ship.keyUp(keycode);
+        return super.keyUp(keycode);
+    }
+
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer) {
+        ship.touchDown(touch,pointer);
+        return super.touchDown(touch, pointer);
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer) {
+        ship.touchUp(touch,pointer);
+        return super.touchUp(touch, pointer);
     }
 }
