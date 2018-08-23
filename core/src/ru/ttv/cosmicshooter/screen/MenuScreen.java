@@ -22,9 +22,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     private static final float BUTTON_PRESS_SCALE = 0.9f;
     private static final float BUTTON_HEIGHT = 0.15f;
 
-    private Texture img;
     private Texture imgBackGround;
-    private Sprite imgSprite;
     private TextureAtlas atlas;
     private Star star[];
     private Background background;
@@ -44,12 +42,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     public void show() {
         super.show();
         imgBackGround = new Texture("textures/2560x2560CatInSpace.jpg");
-        img = new Texture("textures/destroyer348x478.png");
         background = new Background(new TextureRegion(imgBackGround));
-
-        imgSprite = new Sprite(new TextureRegion(img));
-        //background.setSize(23f,23f);
-        //imgSprite.setSize(4f,4f);
 
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
         star = new Star[STAR_COUNT];
@@ -86,7 +79,6 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         }
         buttonExit.draw(batch);
         buttonNewGame.draw(batch);
-        imgSprite.draw(batch);
         batch.end();
 
         if(touchPosition != null){
@@ -108,7 +100,6 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     public void dispose() {
         super.dispose();
         imgBackGround.dispose();
-        img.dispose();
         atlas.dispose();
     }
 
@@ -126,16 +117,6 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-//        super.touchDown(screenX, screenY, pointer, button);
-//        if(touchPosition == null){
-//            touchPosition = new Vector2(screenX,Gdx.graphics.getHeight() - screenY);
-//        }else{
-//            touchPosition.set(screenX,Gdx.graphics.getHeight() - screenY);
-//        }
-//        velocity.set(touchPosition.x,touchPosition.y);
-//        velocity.sub(position);
-//        velocity.nor();
-//        System.out.println("Touch position x: "+touchPosition.x+" Touch position y: "+touchPosition.y);
         buttonExit.touchDown(touch,pointer);
         buttonNewGame.touchDown(touch,pointer);
         return super.touchDown(touch,pointer);

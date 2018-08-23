@@ -34,14 +34,13 @@ public class GameScreen extends Base2DScreen {
         super.show();
         bgTexture = new Texture("textures/2560x2560CatInSpace.jpg");
         background = new Background(new TextureRegion(bgTexture));
-        atlas = new TextureAtlas("textures/menuAtlas.tpack");
+        atlas = new TextureAtlas("textures/mainAtlas.tpack");
         star = new Star[STAR_COUNT];
         for (int i = 0; i < star.length; i++){
             star[i] = new Star(atlas);
         }
 
-        mainAtlas = new TextureAtlas("textures/mainAtlas.tpack");
-        ship = new Ship(mainAtlas);
+        ship = new Ship(atlas);
 
     }
 

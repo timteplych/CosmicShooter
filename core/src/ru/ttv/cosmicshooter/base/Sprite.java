@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.ttv.cosmicshooter.math.Rect;
+import ru.ttv.cosmicshooter.utils.Regions;
 
 public class Sprite extends Rect {
     protected float angle;
@@ -12,12 +13,24 @@ public class Sprite extends Rect {
     protected TextureRegion[] regions;
     protected int frame;
 
-    public Sprite(TextureRegion region, int rows, int cols, int frames){
-        if(region == null){
+    public Sprite() {
+    }
+
+    public Sprite(TextureRegion region) {
+        if (region == null) {
             throw new RuntimeException("region == null");
         }
         regions = new TextureRegion[1];
         regions[0] = region;
+    }
+
+    public Sprite(TextureRegion region, int rows, int cols, int frames){
+        this.regions = Regions.split(region,rows,cols,frames);
+        /*if(region == null){
+            throw new RuntimeException("region == null");
+        }
+        regions = new TextureRegion[1];
+        regions[0] = region;*/
     }
 
     public void draw(SpriteBatch batch){

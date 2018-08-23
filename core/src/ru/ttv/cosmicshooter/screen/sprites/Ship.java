@@ -7,14 +7,17 @@ import ru.ttv.cosmicshooter.base.Sprite;
 import ru.ttv.cosmicshooter.math.Rect;
 
 public class Ship extends Sprite {
+    private static final float SHIP_HEIGHT = 0.15f;
     private Rect worldBounds;
 
+
     public Ship(TextureAtlas atlas) {
-        super(atlas.findRegion("main_ship"));
+        super(atlas.findRegion("main_ship"),1,2,2);
+        setHeightProportion(SHIP_HEIGHT);
         TextureRegion tr = ((TextureRegion) atlas.findRegion("main_ship"));
         tr.setRegion(916,95,195,287);
         regions[0] = tr;
-        setHeightProportion(0.15f);
+
     }
 
     @Override
