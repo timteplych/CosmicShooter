@@ -12,7 +12,7 @@ public class Sprite extends Rect {
     protected TextureRegion[] regions;
     protected int frame;
 
-    public Sprite(TextureRegion region){
+    public Sprite(TextureRegion region, int rows, int cols, int frames){
         if(region == null){
             throw new RuntimeException("region == null");
         }
