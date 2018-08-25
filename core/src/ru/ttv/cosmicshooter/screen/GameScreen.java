@@ -2,7 +2,6 @@ package ru.ttv.cosmicshooter.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,8 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.ttv.cosmicshooter.base.Base2DScreen;
 import ru.ttv.cosmicshooter.math.Rect;
+import ru.ttv.cosmicshooter.screen.pool.BulletPool;
 import ru.ttv.cosmicshooter.screen.sprites.Background;
-import ru.ttv.cosmicshooter.screen.sprites.Ship;
+import ru.ttv.cosmicshooter.screen.gamescreen.MainShip;
 import ru.ttv.cosmicshooter.screen.sprites.Star;
 
 public class GameScreen extends Base2DScreen {
@@ -23,8 +23,9 @@ public class GameScreen extends Base2DScreen {
     private TextureAtlas atlas;
     private TextureAtlas mainAtlas;
     private Star star[];
-    private Ship ship;
+    private MainShip mainShip;
 
+    private BulletPool bulletPool = new BulletPool();
 
     public GameScreen(Game game) {
         super(game);
@@ -41,7 +42,7 @@ public class GameScreen extends Base2DScreen {
             star[i] = new Star(atlas);
         }
 
-        ship = new Ship(atlas);
+        mainShip = new MainShip(atlas,bulletPool);
 
     }
 
@@ -62,7 +63,8 @@ public class GameScreen extends Base2DScreen {
         for(int i=0;i<star.length;i++){
             star[i].draw(batch);
         }
-        ship.draw(batch);
+        mainShip.draw(batch);
+        bulletPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -70,7 +72,8 @@ public class GameScreen extends Base2DScreen {
         for(int i=0; i<star.length; i++){
             star[i].update(delta);
         }
-        ship.update(delta);
+        mainShip.update(delta);
+        bulletPool.updateActiveSprites(delta);
     }
 
     public void checkCollisions() {
@@ -78,7 +81,7 @@ public class GameScreen extends Base2DScreen {
     }
 
     public void deleteAllDestroyed() {
-
+        bulletPool.freeAllDestroyedActiveSprites();
     }
 
     @Override
@@ -88,7 +91,7 @@ public class GameScreen extends Base2DScreen {
         for (int i = 0; i < star.length ; i++) {
             star[i].resize(worldBounds);
         }
-        ship.resize(worldBounds);
+        mainShip.resize(worldBounds);
     }
 
     @Override
@@ -96,29 +99,30 @@ public class GameScreen extends Base2DScreen {
         super.dispose();
         bgTexture.dispose();
         atlas.dispose();
+        bulletPool.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        ship.keyDown(keycode);
+        mainShip.keyDown(keycode);
         return super.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        ship.keyUp(keycode);
+        mainShip.keyUp(keycode);
         return super.keyUp(keycode);
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        ship.touchDown(touch,pointer);
+        mainShip.touchDown(touch,pointer);
         return super.touchDown(touch, pointer);
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        ship.touchUp(touch,pointer);
+        mainShip.touchUp(touch,pointer);
         return super.touchUp(touch, pointer);
     }
 }

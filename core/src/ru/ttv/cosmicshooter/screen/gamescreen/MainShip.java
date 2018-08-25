@@ -1,36 +1,42 @@
-package ru.ttv.cosmicshooter.screen.sprites;
+package ru.ttv.cosmicshooter.screen.gamescreen;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.ttv.cosmicshooter.base.Sprite;
 import ru.ttv.cosmicshooter.math.Rect;
+import ru.ttv.cosmicshooter.screen.pool.BulletPool;
 
-public class Ship extends Sprite {
+public class MainShip extends Ship {
     private static final float SHIP_HEIGHT = 0.15f;
     private static final float BOTTOM_MARGIN = 0.05f;
 
     private Vector2 v0 = new Vector2(0.5f,0.0f);
-    private Vector2 v = new Vector2();
-    private Rect worldBounds;
+
 
     private boolean pressedLeft;
     private boolean pressedRight;
 
+    
 
-    public Ship(TextureAtlas atlas) {
+
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"),1,2,2);
         setHeightProportion(SHIP_HEIGHT);
-        TextureRegion tr = ((TextureRegion) atlas.findRegion("main_ship"));
-        tr.setRegion(916,95,195,287);
-        regions[0] = tr;
+//        TextureRegion tr = ((TextureRegion) atlas.findRegion("main_ship"));
+//        tr.setRegion(916,95,195,287);
+//        regions[0] = tr;
+        this.bulletRegion = atlas.findRegion("bulletMainShip");
+        this.bulletHeight = 0.01f;
+        this.bulletV.set(0,0.5f);
+        this.bulletDamage = 1;
+        this.bulletPool = bulletPool;
 
     }
 
     @Override
     public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
         setBottom(worldBounds.getBottom() + BOTTOM_MARGIN);
         this.worldBounds = worldBounds;
     }
@@ -59,6 +65,9 @@ public class Ship extends Sprite {
             case Input.Keys.RIGHT:
                 pressedRight = true;
                 moveRight();
+                break;
+            case Input.Keys.UP:
+                shoot();
                 break;
         }
     }
