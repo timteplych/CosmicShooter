@@ -8,6 +8,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
@@ -29,7 +30,9 @@ public class Base2DScreen implements Screen,InputProcessor {
 
     private Vector2 touch = new Vector2();
 
-    public Base2DScreen(Game game) {
+    protected Music music;
+
+    public Base2DScreen(Game game, Music music) {
         this.game = game;
         Gdx.input.setInputProcessor(this);
         this.screenBounds = new Rect();
@@ -37,6 +40,7 @@ public class Base2DScreen implements Screen,InputProcessor {
         this.glBounds = new Rect(0, 0, 1f, 1f);
         this.worldToGl = new Matrix4();
         this.screenToWorld = new Matrix3();
+        this.music = music;
     }
 
     @Override
@@ -45,6 +49,7 @@ public class Base2DScreen implements Screen,InputProcessor {
             throw new RuntimeException("Set screen without dispose");
         }
         this.batch = new SpriteBatch();
+        music.play();
     }
 
     @Override
@@ -89,7 +94,7 @@ public class Base2DScreen implements Screen,InputProcessor {
     @Override
     public void dispose() {
         batch.dispose();
-
+        music.dispose();
     }
 
     @Override

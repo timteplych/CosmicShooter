@@ -1,6 +1,8 @@
 package ru.ttv.cosmicshooter.screen.gamescreen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
@@ -17,15 +19,12 @@ public class MainShip extends Ship {
     private boolean pressedLeft;
     private boolean pressedRight;
 
-    
+
 
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"),1,2,2);
         setHeightProportion(SHIP_HEIGHT);
-//        TextureRegion tr = ((TextureRegion) atlas.findRegion("main_ship"));
-//        tr.setRegion(916,95,195,287);
-//        regions[0] = tr;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletHeight = 0.01f;
         this.bulletV.set(0,0.5f);

@@ -1,5 +1,7 @@
 package ru.ttv.cosmicshooter.screen.gamescreen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -18,8 +20,11 @@ public class Ship extends Sprite {
     protected float bulletHeight;
     protected int bulletDamage;
 
+    protected Sound shootSound;
+
     public Ship(TextureRegion region, int rows, int cols, int frames) {
         super(region, rows, cols, frames);
+        this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/clong.wav"));
     }
 
     @Override
@@ -30,5 +35,8 @@ public class Ship extends Sprite {
     protected void shoot(){
         Bullet bullet = bulletPool.obtain();
         bullet.set(this,bulletRegion,pos,bulletV,bulletHeight,worldBounds,bulletDamage);
+        shootSound.play();
     }
+
+
 }

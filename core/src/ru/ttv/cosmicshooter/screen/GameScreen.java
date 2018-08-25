@@ -2,6 +2,7 @@ package ru.ttv.cosmicshooter.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -27,8 +28,10 @@ public class GameScreen extends Base2DScreen {
 
     private BulletPool bulletPool = new BulletPool();
 
+
+
     public GameScreen(Game game) {
-        super(game);
+        super(game,Gdx.audio.newMusic(Gdx.files.internal("sounds/fantasy_game_background_looping.mp3")));
     }
 
     @Override
@@ -43,7 +46,8 @@ public class GameScreen extends Base2DScreen {
         }
 
         mainShip = new MainShip(atlas,bulletPool);
-
+        music.setLooping(true);
+        music.setVolume(0.5f);
     }
 
     @Override
@@ -100,6 +104,7 @@ public class GameScreen extends Base2DScreen {
         bgTexture.dispose();
         atlas.dispose();
         bulletPool.dispose();
+
     }
 
     @Override

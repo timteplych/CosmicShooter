@@ -2,6 +2,7 @@ package ru.ttv.cosmicshooter.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -35,7 +36,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     private Vector2 touchPosition;
 
     public MenuScreen(Game game) {
-        super(game);
+        super(game, Gdx.audio.newMusic(Gdx.files.internal("sounds/superboy_menuscreen.mp3")));
     }
 
     @Override
