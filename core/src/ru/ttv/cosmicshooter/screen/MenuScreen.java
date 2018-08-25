@@ -30,10 +30,10 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     private ButtonExit buttonExit;
     private ButtonNewGame buttonNewGame;
 
-    private Vector2 position;
+    /*private Vector2 position;
     private Vector2 velocity;
 
-    private Vector2 touchPosition;
+    private Vector2 touchPosition;*/
 
     public MenuScreen(Game game) {
         super(game, Gdx.audio.newMusic(Gdx.files.internal("sounds/superboy_menuscreen.mp3")));
@@ -57,9 +57,9 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         buttonNewGame = new ButtonNewGame(atlas,this,BUTTON_PRESS_SCALE);
         buttonNewGame.setHeightProportion(BUTTON_HEIGHT);
 
-        position = new Vector2(0,0);
+        /*position = new Vector2(0,0);
         velocity = new Vector2(0,0);
-        touchPosition = null;
+        touchPosition = null;*/
     }
 
     @Override
@@ -82,13 +82,13 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         buttonNewGame.draw(batch);
         batch.end();
 
-        if(touchPosition != null){
+        /*if(touchPosition != null){
             if(Math.round(position.x) != touchPosition.x && Math.round(position.y) != touchPosition.y){
                 position.add(velocity);
             }
         }else{
             position.add(velocity);
-        }
+        }*/
     }
 
     public void update(float delta){
