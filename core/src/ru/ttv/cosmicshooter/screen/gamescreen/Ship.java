@@ -22,9 +22,9 @@ public class Ship extends Sprite {
 
     protected Sound shootSound;
 
-    public Ship(TextureRegion region, int rows, int cols, int frames) {
+    public Ship(TextureRegion region, int rows, int cols, int frames,Sound shootSound) {
         super(region, rows, cols, frames);
-        this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/clong.wav"));
+        this.shootSound = shootSound;
     }
 
     @Override

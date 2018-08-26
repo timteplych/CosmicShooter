@@ -1,6 +1,5 @@
 package ru.ttv.cosmicshooter.screen.gamescreen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -12,18 +11,16 @@ import ru.ttv.cosmicshooter.screen.pool.BulletPool;
 public class MainShip extends Ship {
     private static final float SHIP_HEIGHT = 0.15f;
     private static final float BOTTOM_MARGIN = 0.05f;
+    private static final int INVALID_POINTER = -1;
 
     private Vector2 v0 = new Vector2(0.5f,0.0f);
-
-
     private boolean pressedLeft;
     private boolean pressedRight;
+    private int leftPointer = INVALID_POINTER;
+    private int rightPointer = INVALID_POINTER;
 
-
-
-
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
-        super(atlas.findRegion("main_ship"),1,2,2);
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) {
+        super(atlas.findRegion("main_ship"),1,2,2, shootSound);
         setHeightProportion(SHIP_HEIGHT);
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletHeight = 0.01f;
@@ -105,8 +102,12 @@ public class MainShip extends Ship {
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
         if(touch.x < worldBounds.pos.x){
+            if (leftPointer != INVALID_POINTER) return false;
+            leftPointer = pointer;
             moveLeft();
         }else{
+            if(rightPointer != INVALID_POINTER) return false;
+            rightPointer = pointer;
             moveRight();
         }
         return false;
@@ -114,7 +115,21 @@ public class MainShip extends Ship {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        stop();
+        if(pointer == leftPointer){
+            leftPointer = INVALID_POINTER;
+            if(rightPointer != INVALID_POINTER){
+                moveRight();
+            }else{
+                stop();
+            }
+        }else if (pointer == rightPointer){
+            rightPointer = INVALID_POINTER;
+            if(leftPointer != INVALID_POINTER){
+                moveLeft();
+            }else{
+                stop();
+            }
+        }
         return false;
     }
 }
