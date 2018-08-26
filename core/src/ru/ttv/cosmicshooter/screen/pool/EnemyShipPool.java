@@ -24,6 +24,6 @@ public class EnemyShipPool extends SpritesPool<EnemyShip> {
 
     @Override
     protected EnemyShip newObject() {
-        return new EnemyShip(bulletPool,explosionPool,sound, mainShip);
+        return new EnemyShip(bulletPool,explosionPool,sound, mainShip, worldBounds);
     }
 }

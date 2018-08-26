@@ -14,10 +14,12 @@ import ru.ttv.cosmicshooter.base.Base2DScreen;
 import ru.ttv.cosmicshooter.math.Rect;
 import ru.ttv.cosmicshooter.screen.gamescreen.Explosion;
 import ru.ttv.cosmicshooter.screen.pool.BulletPool;
+import ru.ttv.cosmicshooter.screen.pool.EnemyShipPool;
 import ru.ttv.cosmicshooter.screen.pool.ExplosionPool;
 import ru.ttv.cosmicshooter.screen.sprites.Background;
 import ru.ttv.cosmicshooter.screen.gamescreen.MainShip;
 import ru.ttv.cosmicshooter.screen.sprites.Star;
+import ru.ttv.cosmicshooter.utils.EnemyShipEmitter;
 
 public class GameScreen extends Base2DScreen {
     private static final int STAR_COUNT = 64;
@@ -30,9 +32,12 @@ public class GameScreen extends Base2DScreen {
     private MainShip mainShip;
     private Sound shootSound;
     private Sound explosionSound;
+    private Sound laserSound;
 
     private BulletPool bulletPool = new BulletPool();
     private ExplosionPool explosionPool;
+    private EnemyShipPool enemyShipPool;
+    private EnemyShipEmitter enemyShipEmitter;
 
 
 
@@ -52,11 +57,14 @@ public class GameScreen extends Base2DScreen {
         }
         shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/clong.wav"));
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.mp3"));
+        laserSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         mainShip = new MainShip(atlas,bulletPool,shootSound);
         music.setLooping(true);
         music.setVolume(0.5f);
 
         explosionPool = new ExplosionPool(atlas,explosionSound);
+        enemyShipPool = new EnemyShipPool(bulletPool,explosionPool, worldBounds,mainShip, shootSound);
+        enemyShipEmitter = new EnemyShipEmitter(atlas,worldBounds,enemyShipPool);
     }
 
     @Override
@@ -79,6 +87,7 @@ public class GameScreen extends Base2DScreen {
         mainShip.draw(batch);
         bulletPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);
+        enemyShipPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -89,6 +98,8 @@ public class GameScreen extends Base2DScreen {
         mainShip.update(delta);
         bulletPool.updateActiveSprites(delta);
         explosionPool.updateActiveSprites(delta);
+        enemyShipPool.updateActiveSprites(delta);
+        enemyShipEmitter.generateEnemies(delta);
     }
 
     public void checkCollisions() {
@@ -98,6 +109,7 @@ public class GameScreen extends Base2DScreen {
     public void deleteAllDestroyed() {
         bulletPool.freeAllDestroyedActiveSprites();
         explosionPool.freeAllDestroyedActiveSprites();
+        enemyShipPool.freeAllDestroyedActiveSprites();
     }
 
     @Override
@@ -117,8 +129,9 @@ public class GameScreen extends Base2DScreen {
         atlas.dispose();
         bulletPool.dispose();
         explosionPool.dispose();
+        enemyShipPool.dispose();
         shootSound.dispose();
-
+        laserSound.dispose();
     }
 
     @Override
@@ -136,8 +149,6 @@ public class GameScreen extends Base2DScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
         mainShip.touchDown(touch,pointer);
-        Explosion explosion = explosionPool.obtain();
-        explosion.set(0.15f,touch);
         return super.touchDown(touch, pointer);
     }
 

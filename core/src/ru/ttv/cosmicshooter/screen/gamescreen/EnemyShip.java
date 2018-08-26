@@ -4,16 +4,16 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.ttv.cosmicshooter.math.Rect;
 import ru.ttv.cosmicshooter.screen.pool.BulletPool;
-import ru.ttv.cosmicshooter.screen.pool.EnemyShipPool;
 import ru.ttv.cosmicshooter.screen.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
     private Vector2 v0 = new Vector2();
     private MainShip mainShip;
 
-    public EnemyShip(BulletPool bulletPool, ExplosionPool explosionPool, Sound sound, MainShip mainShip) {
-        super(bulletPool, explosionPool, sound);
+    public EnemyShip(BulletPool bulletPool, ExplosionPool explosionPool, Sound sound, MainShip mainShip, Rect worldBounds) {
+        super(bulletPool, explosionPool, sound, worldBounds);
         this.mainShip = mainShip;
         this.v.set(v0);
     }
@@ -21,6 +21,16 @@ public class EnemyShip extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
+        pos.mulAdd(v,delta);
+        reloadTimer += delta;
+        if (reloadTimer >= reloadInterval) {
+            reloadTimer = 0f;
+            shoot();
+        }
+        if (getBottom() < worldBounds.getBottom()) {
+            boom();
+            destroy();
+        }
     }
 
     public void set(
@@ -43,6 +53,7 @@ public class EnemyShip extends Ship {
         this.reloadInterval = reloadInterval;
         this.hp = hp;
         setHeightProportion(height);
+        v.set(v0);
 
     }
 }

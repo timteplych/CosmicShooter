@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.ttv.cosmicshooter.math.Rect;
+import ru.ttv.cosmicshooter.math.Rnd;
+import ru.ttv.cosmicshooter.screen.gamescreen.EnemyShip;
 import ru.ttv.cosmicshooter.screen.pool.EnemyShipPool;
 
 public class EnemyShipEmitter {
@@ -17,7 +19,6 @@ public class EnemyShipEmitter {
     private static final int   SMALL_ENEMYSHIP_HP = 1;
 
     private Rect worldBounds;
-    private Sound bulletSound;
 
     private float generateInterval = 4f;
     private float generateTimer;
@@ -29,9 +30,8 @@ public class EnemyShipEmitter {
 
     private EnemyShipPool enemyShipPool;
 
-    public EnemyShipEmitter(TextureAtlas atlas, Rect worldBounds, Sound bulletSound, EnemyShipPool enemyShipPool) {
+    public EnemyShipEmitter(TextureAtlas atlas, Rect worldBounds, EnemyShipPool enemyShipPool) {
         this.worldBounds = worldBounds;
-        this.bulletSound = bulletSound;
         this.enemyShipPool = enemyShipPool;
 
         TextureRegion textureRegion0 = atlas.findRegion("enemy0");
@@ -40,6 +40,24 @@ public class EnemyShipEmitter {
     }
 
     public void generateEnemies(float delta){
-        
+        generateTimer += delta;
+        if(generateTimer >= generateInterval){
+            generateTimer = 0f;
+            EnemyShip enemyShip = enemyShipPool.obtain();
+            enemyShip.set(
+                    enemySmallRegion,
+                    enemySmallV,
+                    bulletRegion,
+                    SMALL_ENEMYSHIP_BULLET_HEIGHT,
+                    SMALL_ENEMYSHIP_BULLET_VY,
+                    SMALL_ENEMYSHIP_BULLET_DAMAGE,
+                    SMALL_ENEMYSHIP_RELOAD_INTERVAL,
+                    SMALL_ENEMYSHIP_HEIGHT,
+                    SMALL_ENEMYSHIP_HP
+            );
+            enemyShip.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemyShip.getHalfWidth(), worldBounds.getRight() - enemyShip.getHalfHeight());
+            enemyShip.setBottom(worldBounds.getTop());
+
+        }
     }
 }

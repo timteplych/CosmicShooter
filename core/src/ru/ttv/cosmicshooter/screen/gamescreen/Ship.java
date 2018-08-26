@@ -29,10 +29,11 @@ public class Ship extends Sprite {
     protected float reloadInterval;
     protected float reloadTimer;
 
-    public Ship(BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) {
+    public Ship(BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound, Rect worldBounds) {
         this.shootSound = shootSound;
         this.bulletPool = bulletPool;
         this.explosionPool = explosionPool;
+        this.worldBounds = worldBounds;
 
     }
 
@@ -50,6 +51,11 @@ public class Ship extends Sprite {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this,bulletRegion,pos,bulletV,bulletHeight,worldBounds,bulletDamage);
         shootSound.play();
+    }
+
+    public void boom(){
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(getHeight(),pos);
     }
 
 

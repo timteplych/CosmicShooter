@@ -22,7 +22,7 @@ public class Base2DScreen implements Screen,InputProcessor {
     protected SpriteBatch batch;
     protected Game game;
     private Rect screenBounds;
-    private Rect worldBounds;
+    protected Rect worldBounds;
     private Rect glBounds;
 
     private Matrix4 worldToGl;
