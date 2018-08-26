@@ -27,7 +27,7 @@ public class MainShip extends Ship {
         this.bulletV.set(0,0.5f);
         this.bulletDamage = 1;
         this.bulletPool = bulletPool;
-
+        this.reloadInterval = 0.4f;
     }
 
     @Override
@@ -40,6 +40,11 @@ public class MainShip extends Ship {
     @Override
     public void update(float delta) {
         pos.mulAdd(v,delta);
+        reloadTimer += delta;
+        if(reloadTimer >= reloadInterval){
+            reloadTimer = 0f;
+            shoot();
+        }
         if(getRight() > worldBounds.getRight()){
             setRight(worldBounds.getRight());
             stop();

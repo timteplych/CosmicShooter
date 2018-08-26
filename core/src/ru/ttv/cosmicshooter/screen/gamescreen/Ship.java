@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.ttv.cosmicshooter.base.Sprite;
 import ru.ttv.cosmicshooter.math.Rect;
 import ru.ttv.cosmicshooter.screen.pool.BulletPool;
+import ru.ttv.cosmicshooter.screen.pool.ExplosionPool;
 
 public class Ship extends Sprite {
     protected Vector2 v = new Vector2();
@@ -15,12 +16,25 @@ public class Ship extends Sprite {
 
     protected BulletPool bulletPool;
     protected TextureRegion bulletRegion;
+    protected ExplosionPool explosionPool;
 
     protected Vector2 bulletV = new Vector2();
     protected float bulletHeight;
     protected int bulletDamage;
 
     protected Sound shootSound;
+
+    protected int hp = 100;
+
+    protected float reloadInterval;
+    protected float reloadTimer;
+
+    public Ship(BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) {
+        this.shootSound = shootSound;
+        this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
+
+    }
 
     public Ship(TextureRegion region, int rows, int cols, int frames,Sound shootSound) {
         super(region, rows, cols, frames);
