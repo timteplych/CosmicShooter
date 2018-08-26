@@ -12,7 +12,9 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.ttv.cosmicshooter.base.Base2DScreen;
 import ru.ttv.cosmicshooter.math.Rect;
+import ru.ttv.cosmicshooter.screen.gamescreen.Explosion;
 import ru.ttv.cosmicshooter.screen.pool.BulletPool;
+import ru.ttv.cosmicshooter.screen.pool.ExplosionPool;
 import ru.ttv.cosmicshooter.screen.sprites.Background;
 import ru.ttv.cosmicshooter.screen.gamescreen.MainShip;
 import ru.ttv.cosmicshooter.screen.sprites.Star;
@@ -27,8 +29,10 @@ public class GameScreen extends Base2DScreen {
     private Star star[];
     private MainShip mainShip;
     private Sound shootSound;
+    private Sound explosionSound;
 
     private BulletPool bulletPool = new BulletPool();
+    private ExplosionPool explosionPool;
 
 
 
@@ -47,9 +51,12 @@ public class GameScreen extends Base2DScreen {
             star[i] = new Star(atlas);
         }
         shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/clong.wav"));
+        explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.mp3"));
         mainShip = new MainShip(atlas,bulletPool,shootSound);
         music.setLooping(true);
         music.setVolume(0.5f);
+
+        explosionPool = new ExplosionPool(atlas,explosionSound);
     }
 
     @Override
@@ -71,6 +78,7 @@ public class GameScreen extends Base2DScreen {
         }
         mainShip.draw(batch);
         bulletPool.drawActiveSprites(batch);
+        explosionPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -80,6 +88,7 @@ public class GameScreen extends Base2DScreen {
         }
         mainShip.update(delta);
         bulletPool.updateActiveSprites(delta);
+        explosionPool.updateActiveSprites(delta);
     }
 
     public void checkCollisions() {
@@ -88,6 +97,7 @@ public class GameScreen extends Base2DScreen {
 
     public void deleteAllDestroyed() {
         bulletPool.freeAllDestroyedActiveSprites();
+        explosionPool.freeAllDestroyedActiveSprites();
     }
 
     @Override
@@ -106,6 +116,7 @@ public class GameScreen extends Base2DScreen {
         bgTexture.dispose();
         atlas.dispose();
         bulletPool.dispose();
+        explosionPool.dispose();
         shootSound.dispose();
 
     }
@@ -125,6 +136,8 @@ public class GameScreen extends Base2DScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
         mainShip.touchDown(touch,pointer);
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(0.15f,touch);
         return super.touchDown(touch, pointer);
     }
 
