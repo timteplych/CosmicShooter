@@ -22,7 +22,7 @@ import ru.ttv.cosmicshooter.screen.sprites.Star;
 import ru.ttv.cosmicshooter.utils.EnemyShipEmitter;
 
 public class GameScreen extends Base2DScreen {
-    private static final int STAR_COUNT = 64;
+    private static final int STAR_COUNT = 32;
     private static final float STEP = 0.02f;
     private Background background;
     private Texture bgTexture;
