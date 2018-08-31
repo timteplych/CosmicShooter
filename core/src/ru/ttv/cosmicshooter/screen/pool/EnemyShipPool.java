@@ -26,4 +26,6 @@ public class EnemyShipPool extends SpritesPool<EnemyShip> {
     protected EnemyShip newObject() {
         return new EnemyShip(bulletPool,explosionPool,sound, mainShip, worldBounds);
     }
+
+
 }

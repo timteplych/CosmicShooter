@@ -9,8 +9,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 import ru.ttv.cosmicshooter.base.Base2DScreen;
 import ru.ttv.cosmicshooter.math.Rect;
+import ru.ttv.cosmicshooter.screen.gamescreen.Bullet;
+import ru.ttv.cosmicshooter.screen.gamescreen.EnemyShip;
 import ru.ttv.cosmicshooter.screen.pool.BulletPool;
 import ru.ttv.cosmicshooter.screen.pool.EnemyShipPool;
 import ru.ttv.cosmicshooter.screen.pool.ExplosionPool;
@@ -101,7 +105,33 @@ public class GameScreen extends Base2DScreen {
     }
 
     public void checkCollisions() {
+        List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
+        for(EnemyShip enemyShip : enemyShipList){
+            if(enemyShip.isDestroyed()){
+                continue;
+            }
+            float minDist = enemyShip.getHalfWidth() + mainShip.getHalfWidth();
+            if(enemyShip.pos.dst2(mainShip.pos)<minDist*minDist){
+                enemyShip.destroy();
+                return;
+            }
+        }
 
+        List<Bullet> bulletList = bulletPool.getActiveObjects();
+        for(EnemyShip enemyShip: enemyShipList){
+            if(enemyShip.isDestroyed()){
+                continue;
+            }
+            for (Bullet bullet:bulletList){
+                if(bullet.getOwner() != mainShip || bullet.isDestroyed()){
+                    continue;
+                }
+                if(enemyShip.isBulletCollision(bullet)){
+                    enemyShip.damage(bullet.getDamage());
+                    bullet.destroy();
+                }
+            }
+        }
     }
 
     public void deleteAllDestroyed() {
