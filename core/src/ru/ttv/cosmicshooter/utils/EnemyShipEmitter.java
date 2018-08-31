@@ -1,6 +1,5 @@
 package ru.ttv.cosmicshooter.utils;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -11,6 +10,7 @@ import ru.ttv.cosmicshooter.screen.gamescreen.EnemyShip;
 import ru.ttv.cosmicshooter.screen.pool.EnemyShipPool;
 
 public class EnemyShipEmitter {
+
     private static final float SMALL_ENEMYSHIP_HEIGHT = 0.1f;
     private static final float SMALL_ENEMYSHIP_BULLET_HEIGHT = 0.01f;
     private static final float SMALL_ENEMYSHIP_BULLET_VY = -0.3f;
@@ -24,6 +24,7 @@ public class EnemyShipEmitter {
     private static final int   LARGE_ENEMYSHIP_BULLET_DAMAGE = 2;
     private static final float LARGE_ENEMYSHIP_RELOAD_INTERVAL = 3f;
     private static final int   LARGE_ENEMYSHIP_HP = 10;
+
 
     private Rect worldBounds;
 

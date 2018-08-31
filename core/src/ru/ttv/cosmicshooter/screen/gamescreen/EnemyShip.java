@@ -9,6 +9,9 @@ import ru.ttv.cosmicshooter.screen.pool.BulletPool;
 import ru.ttv.cosmicshooter.screen.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
+    private enum State{DESCENT,FIGHT}
+    private State state;
+    private Vector2 descentV = new Vector2(0, -0.15f);
     private Vector2 v0 = new Vector2();
     private MainShip mainShip;
 
@@ -22,14 +25,26 @@ public class EnemyShip extends Ship {
     public void update(float delta) {
         super.update(delta);
         pos.mulAdd(v,delta);
-        reloadTimer += delta;
-        if (reloadTimer >= reloadInterval) {
-            reloadTimer = 0f;
-            shoot();
-        }
-        if (getBottom() < worldBounds.getBottom()) {
-            boom();
-            destroy();
+
+
+        switch (state){
+            case DESCENT:
+                if(getTop() <= worldBounds.getTop()){
+                    v.set(v0);
+                    state = state.FIGHT;
+                }
+                break;
+            case FIGHT:
+                reloadTimer += delta;
+                if (reloadTimer >= reloadInterval) {
+                    reloadTimer = 0f;
+                    shoot();
+                }
+                if (getBottom() < worldBounds.getBottom()) {
+                    boom();
+                    destroy();
+                }
+                break;
         }
     }
 
@@ -53,7 +68,9 @@ public class EnemyShip extends Ship {
         this.reloadInterval = reloadInterval;
         this.hp = hp;
         setHeightProportion(height);
-        v.set(v0);
+        v.set(descentV);
+        reloadTimer = reloadInterval;
+        state = State.DESCENT;
 
     }
 }
