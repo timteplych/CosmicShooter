@@ -2,11 +2,14 @@ package ru.ttv.cosmicshooter.screen.gamescreen;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.ttv.cosmicshooter.math.Rect;
+import ru.ttv.cosmicshooter.screen.GameScreen;
 import ru.ttv.cosmicshooter.screen.pool.BulletPool;
+import ru.ttv.cosmicshooter.screen.pool.ExplosionPool;
 
 public class MainShip extends Ship {
     private static final float SHIP_HEIGHT = 0.15f;
@@ -19,15 +22,21 @@ public class MainShip extends Ship {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) {
-        super(atlas.findRegion("main_ship"),1,2,2, shootSound);
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound,ExplosionPool explosionPool) {
+        super(atlas.findRegion("main_ship"),1,2,2, shootSound, explosionPool);
         setHeightProportion(SHIP_HEIGHT);
         this.bulletRegion = atlas.findRegion("bulletMainShip");
+        this.bulletPool = bulletPool;
+    }
+
+    public void startNewGame(){
         this.bulletHeight = 0.01f;
         this.bulletV.set(0,0.5f);
         this.bulletDamage = 1;
-        this.bulletPool = bulletPool;
         this.reloadInterval = 0.4f;
+        this.hp = 1;
+        flushDestroy();
+
     }
 
     @Override
@@ -39,6 +48,7 @@ public class MainShip extends Ship {
 
     @Override
     public void update(float delta) {
+        super.update(delta);
         pos.mulAdd(v,delta);
         reloadTimer += delta;
         if(reloadTimer >= reloadInterval){
@@ -137,4 +147,14 @@ public class MainShip extends Ship {
         }
         return false;
     }
+
+    public boolean isBulletCollision(Rect bullet){
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > pos.y
+                || bullet.getTop() < getBottom()
+        );
+    }
+
+
 }

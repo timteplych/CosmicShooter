@@ -25,7 +25,7 @@ public class Ship extends Sprite {
 
     protected Sound shootSound;
 
-    protected int hp = 100;
+    protected int hp = 0;
 
     protected float reloadInterval;
     protected float reloadTimer;
@@ -38,9 +38,10 @@ public class Ship extends Sprite {
 
     }
 
-    public Ship(TextureRegion region, int rows, int cols, int frames,Sound shootSound) {
+    public Ship(TextureRegion region, int rows, int cols, int frames,Sound shootSound, ExplosionPool explosionPool) {
         super(region, rows, cols, frames);
         this.shootSound = shootSound;
+        this.explosionPool = explosionPool;
     }
 
     @Override
@@ -72,7 +73,14 @@ public class Ship extends Sprite {
         frame = 1;
         damageAnimateTimer = 0f;
         hp -= damage;
+        if(hp <= 0){
+            destroy();
+        }
     }
-
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
+    }
 
 }

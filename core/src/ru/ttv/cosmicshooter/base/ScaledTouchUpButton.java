@@ -7,7 +7,7 @@ public class ScaledTouchUpButton extends Sprite {
     private int pointer;
     private boolean pressed;
     private float pressScale;
-    private ActionListener actionListener;
+    protected ActionListener actionListener;
 
     public ScaledTouchUpButton(TextureRegion region, ActionListener actionListener, float pressScale) {
         super(region);
