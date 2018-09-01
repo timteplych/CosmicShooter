@@ -77,14 +77,15 @@ public class GameScreen extends Base2DScreen implements ActionListener {
         enemyShipPool = new EnemyShipPool(bulletPool,explosionPool, worldBounds,mainShip, shootSound);
         enemyShipEmitter = new EnemyShipEmitter(atlas,worldBounds,enemyShipPool);
         messageGameOver = new MessageGameOver(atlas);
-        messageNewGame = new MessageNewGame(atlas,this,0.9f);
+        messageNewGame = new MessageNewGame(atlas,this);
         startNewGame();
     }
 
     @Override
     public void actionPerformed(Object src) {
-        System.out.println("Start new game!!!!!!");
-        startNewGame();
+        if(src == messageNewGame){
+            startNewGame();
+        }
     }
 
     @Override
@@ -214,26 +215,35 @@ public class GameScreen extends Base2DScreen implements ActionListener {
 
     @Override
     public boolean keyDown(int keycode) {
-        mainShip.keyDown(keycode);
+        if(state == State.PLAYING) {
+            mainShip.keyDown(keycode);
+        }
         return super.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        mainShip.keyUp(keycode);
+        if(state == State.PLAYING) {
+            mainShip.keyUp(keycode);
+        }
         return super.keyUp(keycode);
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        mainShip.touchDown(touch,pointer);
+        if(state == State.PLAYING){
+            mainShip.touchDown(touch,pointer);
+        }else{
+            messageNewGame.touchDown(touch,pointer);
+        }
         return super.touchDown(touch, pointer);
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        mainShip.touchUp(touch,pointer);
-        if(state == State.GAME_OVER){
+        if(state == State.PLAYING){
+            mainShip.touchUp(touch,pointer);
+        }else{
             messageNewGame.touchUp(touch,pointer);
         }
         return super.touchUp(touch, pointer);
