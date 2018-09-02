@@ -33,6 +33,7 @@ public class MainShip extends Ship {
         this.bulletDamage = 1;
         this.reloadInterval = 0.4f;
         this.hp = 100;
+        stop();
         flushDestroy();
 
     }
