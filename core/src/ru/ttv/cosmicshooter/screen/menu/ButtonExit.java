@@ -1,7 +1,6 @@
 package ru.ttv.cosmicshooter.screen.menu;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import ru.ttv.cosmicshooter.base.ActionListener;
 import ru.ttv.cosmicshooter.base.ScaledTouchUpButton;

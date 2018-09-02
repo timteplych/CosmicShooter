@@ -8,7 +8,7 @@ import ru.ttv.cosmicshooter.math.Rect;
 import ru.ttv.cosmicshooter.math.Rnd;
 
 public class Star extends Sprite {
-    private Vector2 v = new Vector2();
+    protected Vector2 v = new Vector2();
     private Rect worldBounds;
     public Star(TextureAtlas atlas) {
         super(atlas.findRegion("star"));
@@ -30,7 +30,7 @@ public class Star extends Sprite {
         checkAndHandleBounds();
     }
 
-    private void checkAndHandleBounds() {
+    protected void checkAndHandleBounds() {
         if(getRight() < worldBounds.getLeft()) setLeft(worldBounds.getRight());
         if(getLeft() > worldBounds.getRight()) setRight(worldBounds.getLeft());
         if(getTop() < worldBounds.getBottom()) setBottom(worldBounds.getTop());

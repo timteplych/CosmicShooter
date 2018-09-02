@@ -2,12 +2,10 @@ package ru.ttv.cosmicshooter.screen.gamescreen;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.ttv.cosmicshooter.math.Rect;
-import ru.ttv.cosmicshooter.screen.GameScreen;
 import ru.ttv.cosmicshooter.screen.pool.BulletPool;
 import ru.ttv.cosmicshooter.screen.pool.ExplosionPool;
 
@@ -34,7 +32,7 @@ public class MainShip extends Ship {
         this.bulletV.set(0,0.5f);
         this.bulletDamage = 1;
         this.reloadInterval = 0.4f;
-        this.hp = 1;
+        this.hp = 100;
         flushDestroy();
 
     }

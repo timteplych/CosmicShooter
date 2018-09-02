@@ -40,6 +40,7 @@ public class EnemyShipEmitter {
     private TextureRegion bulletRegion;
 
     private EnemyShipPool enemyShipPool;
+    private int level;
 
     public EnemyShipEmitter(TextureAtlas atlas, Rect worldBounds, EnemyShipPool enemyShipPool) {
         this.worldBounds = worldBounds;
@@ -54,7 +55,8 @@ public class EnemyShipEmitter {
         this.bulletRegion = atlas.findRegion("bulletEnemy");
     }
 
-    public void generateEnemies(float delta){
+    public void generateEnemies(float delta, int frags){
+        level = frags/10 + 1;
         generateTimer += delta;
         if(generateTimer >= generateInterval){
             generateTimer = 0f;
@@ -67,7 +69,7 @@ public class EnemyShipEmitter {
                         bulletRegion,
                         SMALL_ENEMYSHIP_BULLET_HEIGHT,
                         SMALL_ENEMYSHIP_BULLET_VY,
-                        SMALL_ENEMYSHIP_BULLET_DAMAGE,
+                        SMALL_ENEMYSHIP_BULLET_DAMAGE * level,
                         SMALL_ENEMYSHIP_RELOAD_INTERVAL,
                         SMALL_ENEMYSHIP_HEIGHT,
                         SMALL_ENEMYSHIP_HP
@@ -79,7 +81,7 @@ public class EnemyShipEmitter {
                         bulletRegion,
                         LARGE_ENEMYSHIP_BULLET_HEIGHT,
                         LARGE_ENEMYSHIP_BULLET_VY,
-                        LARGE_ENEMYSHIP_BULLET_DAMAGE,
+                        LARGE_ENEMYSHIP_BULLET_DAMAGE * level,
                         LARGE_ENEMYSHIP_RELOAD_INTERVAL,
                         LARGE_ENEMYSHIP_HEIGHT,
                         LARGE_ENEMYSHIP_HP
@@ -91,7 +93,7 @@ public class EnemyShipEmitter {
                         bulletRegion,
                         SMALL_ENEMYSHIP_BULLET_HEIGHT,
                         SMALL_ENEMYSHIP_BULLET_VY,
-                        SMALL_ENEMYSHIP_BULLET_DAMAGE,
+                        SMALL_ENEMYSHIP_BULLET_DAMAGE * level,
                         SMALL_ENEMYSHIP_RELOAD_INTERVAL,
                         SMALL_ENEMYSHIP_HEIGHT,
                         SMALL_ENEMYSHIP_HP
@@ -102,5 +104,12 @@ public class EnemyShipEmitter {
             enemyShip.setBottom(worldBounds.getTop());
 
         }
+    }
+    public int getLevel() {
+        return level;
+    }
+
+    public  void startNewGame(){
+        level = 1;
     }
 }

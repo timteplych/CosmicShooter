@@ -1,7 +1,6 @@
 package ru.ttv.cosmicshooter.screen.gamescreen;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
 
 import ru.ttv.cosmicshooter.base.Sprite;
 

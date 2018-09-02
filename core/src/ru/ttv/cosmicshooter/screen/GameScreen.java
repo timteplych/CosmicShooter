@@ -8,16 +8,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.List;
 
 import ru.ttv.cosmicshooter.base.ActionListener;
 import ru.ttv.cosmicshooter.base.Base2DScreen;
+import ru.ttv.cosmicshooter.base.Font;
 import ru.ttv.cosmicshooter.math.Rect;
 import ru.ttv.cosmicshooter.screen.gamescreen.Bullet;
 import ru.ttv.cosmicshooter.screen.gamescreen.EnemyShip;
 import ru.ttv.cosmicshooter.screen.gamescreen.MessageGameOver;
 import ru.ttv.cosmicshooter.screen.gamescreen.MessageNewGame;
+import ru.ttv.cosmicshooter.screen.gamescreen.TrackingStar;
 import ru.ttv.cosmicshooter.screen.pool.BulletPool;
 import ru.ttv.cosmicshooter.screen.pool.EnemyShipPool;
 import ru.ttv.cosmicshooter.screen.pool.ExplosionPool;
@@ -30,12 +33,16 @@ public class GameScreen extends Base2DScreen implements ActionListener {
     private enum State {PLAYING, GAME_OVER}
 
     private static final int STAR_COUNT = 32;
-    private static final float STEP = 0.02f;
+    private static final float FONT_SIZE = 0.03f;
+    private static final String FRAGS = "Frags: ";
+    private static final String HP = "HP: ";
+    private static final String LEVEL = "Level: ";
+
     private Background background;
     private Texture bgTexture;
     private TextureAtlas atlas;
     private TextureAtlas mainAtlas;
-    private Star star[];
+    private TrackingStar star[];
     private MainShip mainShip;
     private Sound shootSound;
     private Sound explosionSound;
@@ -50,6 +57,10 @@ public class GameScreen extends Base2DScreen implements ActionListener {
 
     private MessageGameOver messageGameOver;
     private MessageNewGame messageNewGame;
+    private Font font;
+    private StringBuilder sbFrags = new StringBuilder();
+    private StringBuilder sbHP = new StringBuilder();
+    private StringBuilder sbLevel = new StringBuilder();
 
     int frags;
 
@@ -63,21 +74,23 @@ public class GameScreen extends Base2DScreen implements ActionListener {
         bgTexture = new Texture("textures/2560x2560CatInSpace.jpg");
         background = new Background(new TextureRegion(bgTexture));
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
-        star = new Star[STAR_COUNT];
-        for (int i = 0; i < star.length; i++){
-            star[i] = new Star(atlas);
-        }
         shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/clong.wav"));
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.mp3"));
         laserSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         explosionPool = new ExplosionPool(atlas,explosionSound);
         mainShip = new MainShip(atlas,bulletPool,shootSound, explosionPool);
+        star = new TrackingStar[STAR_COUNT];
+        for (int i = 0; i < star.length; i++){
+            star[i] = new TrackingStar(atlas,mainShip.getV());
+        }
         music.setLooping(true);
         music.setVolume(0.5f);
         enemyShipPool = new EnemyShipPool(bulletPool,explosionPool, worldBounds,mainShip, shootSound);
         enemyShipEmitter = new EnemyShipEmitter(atlas,worldBounds,enemyShipPool);
         messageGameOver = new MessageGameOver(atlas);
         messageNewGame = new MessageNewGame(atlas,this);
+        font = new Font("font/font.fnt", "font/font.png");
+        font.setWorldSize(FONT_SIZE);
         startNewGame();
     }
 
@@ -113,7 +126,17 @@ public class GameScreen extends Base2DScreen implements ActionListener {
             messageGameOver.draw(batch);
             messageNewGame.draw(batch);
         }
+        printInfo();
         batch.end();
+    }
+
+    public void printInfo() {
+        sbFrags.setLength(0);
+        sbHP.setLength(0);
+        sbLevel.setLength(0);
+        font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft(), worldBounds.getTop());
+        font.draw(batch, sbHP.append(HP).append(mainShip.getHp()), worldBounds.pos.x, worldBounds.getTop(), Align.center);
+        font.draw(batch, sbLevel.append(LEVEL).append(enemyShipEmitter.getLevel()), worldBounds.getRight(), worldBounds.getTop(),  Align.right);
     }
 
     public void update(float delta) {
@@ -128,7 +151,7 @@ public class GameScreen extends Base2DScreen implements ActionListener {
             case PLAYING:
                 mainShip.update(delta);
                 enemyShipPool.updateActiveSprites(delta);
-                enemyShipEmitter.generateEnemies(delta);
+                enemyShipEmitter.generateEnemies(delta, frags);
                 bulletPool.updateActiveSprites(delta);
                 break;
             case GAME_OVER:
@@ -253,6 +276,7 @@ public class GameScreen extends Base2DScreen implements ActionListener {
         state = State.PLAYING;
         frags = 0;
         mainShip.startNewGame();
+        enemyShipEmitter.startNewGame();
         bulletPool.freeAllActiveObjects();
         enemyShipPool.freeAllActiveObjects();
         explosionPool.freeAllActiveObjects();
