@@ -18,6 +18,7 @@ import ru.ttv.cosmicshooter.base.Font;
 import ru.ttv.cosmicshooter.math.Rect;
 import ru.ttv.cosmicshooter.screen.gamescreen.Bullet;
 import ru.ttv.cosmicshooter.screen.gamescreen.EnemyShip;
+import ru.ttv.cosmicshooter.screen.gamescreen.HealthPointsBar;
 import ru.ttv.cosmicshooter.screen.gamescreen.MessageGameOver;
 import ru.ttv.cosmicshooter.screen.gamescreen.MessageNewGame;
 import ru.ttv.cosmicshooter.screen.gamescreen.TrackingStar;
@@ -26,7 +27,6 @@ import ru.ttv.cosmicshooter.screen.pool.EnemyShipPool;
 import ru.ttv.cosmicshooter.screen.pool.ExplosionPool;
 import ru.ttv.cosmicshooter.screen.sprites.Background;
 import ru.ttv.cosmicshooter.screen.gamescreen.MainShip;
-import ru.ttv.cosmicshooter.screen.sprites.Star;
 import ru.ttv.cosmicshooter.utils.EnemyShipEmitter;
 
 public class GameScreen extends Base2DScreen implements ActionListener {
@@ -34,6 +34,7 @@ public class GameScreen extends Base2DScreen implements ActionListener {
 
     private static final int STAR_COUNT = 32;
     private static final float FONT_SIZE = 0.03f;
+    private static final int MAINSHIP_HP_START_LEVEL = 100;
     private static final String FRAGS = "Frags: ";
     private static final String HP = "HP: ";
     private static final String LEVEL = "Level: ";
@@ -53,6 +54,7 @@ public class GameScreen extends Base2DScreen implements ActionListener {
     private EnemyShipPool enemyShipPool;
     private EnemyShipEmitter enemyShipEmitter;
 
+    private HealthPointsBar healthPointsBar;
     private State state;
 
     private MessageGameOver messageGameOver;
@@ -91,6 +93,7 @@ public class GameScreen extends Base2DScreen implements ActionListener {
         messageNewGame = new MessageNewGame(atlas,this);
         font = new Font("font/font.fnt", "font/font.png");
         font.setWorldSize(FONT_SIZE);
+        healthPointsBar = new HealthPointsBar(MAINSHIP_HP_START_LEVEL);
         startNewGame();
     }
 
@@ -122,6 +125,7 @@ public class GameScreen extends Base2DScreen implements ActionListener {
         bulletPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);
         enemyShipPool.drawActiveSprites(batch);
+        healthPointsBar.draw(batch, mainShip.getHp());
         if(state ==  State.GAME_OVER){
             messageGameOver.draw(batch);
             messageNewGame.draw(batch);
@@ -275,7 +279,7 @@ public class GameScreen extends Base2DScreen implements ActionListener {
     private void startNewGame(){
         state = State.PLAYING;
         frags = 0;
-        mainShip.startNewGame();
+        mainShip.startNewGame(MAINSHIP_HP_START_LEVEL);
         enemyShipEmitter.startNewGame();
         bulletPool.freeAllActiveObjects();
         enemyShipPool.freeAllActiveObjects();

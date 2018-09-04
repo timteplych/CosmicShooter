@@ -27,12 +27,12 @@ public class MainShip extends Ship {
         this.bulletPool = bulletPool;
     }
 
-    public void startNewGame(){
+    public void startNewGame(int startHpLevel){
         this.bulletHeight = 0.01f;
         this.bulletV.set(0,0.5f);
         this.bulletDamage = 1;
         this.reloadInterval = 0.4f;
-        this.hp = 100;
+        this.hp = startHpLevel;
         stop();
         flushDestroy();
 
